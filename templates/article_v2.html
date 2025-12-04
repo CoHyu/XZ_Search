@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="no-referrer" />
+    <title>{{ article.title }}</title>
+
+    <link
+      rel="stylesheet"
+      href="https://xz.aliyun.com/assets/js/yuque/doc.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://xz.aliyun.com/assets/pc/css/antd.css"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial,
+          sans-serif;
+        background: #fff;
+        color: #000;
+        line-height: 1.8;
+        display: flex;
+        justify-content: center;
+      }
+
+      .layout {
+        display: flex;
+        max-width: 1400px;
+        width: 100%;
+        position: relative;
+      }
+
+      .container {
+        flex: 1;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+
+      .back-link {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #000;
+        text-decoration: none;
+        border-bottom: 1px solid #000;
+      }
+
+      .back-link:hover {
+        opacity: 0.6;
+      }
+
+      h1 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #000;
+        padding-bottom: 10px;
+      }
+
+      .meta {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .content {
+        font-size: 16px;
+        line-height: 1.8;
+      }
+
+      .content img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 20px auto;
+        border: 1px solid #eee;
+      }
+
+      .content h1,
+      .content h2,
+      .content h3 {
+        margin-top: 30px;
+        margin-bottom: 15px;
+        font-weight: 600;
+      }
+
+      .content h1 {
+        font-size: 28px;
+        border-bottom: 2px solid #000;
+        padding-bottom: 10px;
+      }
+
+      .content h2 {
+        font-size: 24px;
+      }
+
+      .content h3 {
+        font-size: 20px;
+      }
+
+      .content p {
+        margin-bottom: 15px;
+      }
+
+      .content pre {
+        background: #f5f5f5;
+        padding: 15px;
+        border-left: 3px solid #000;
+        overflow-x: auto;
+        margin: 15px 0;
+      }
+
+      .content code {
+        font-family: "Courier New", monospace;
+        font-size: 14px;
+      }
+
+      .content a {
+        color: #000;
+        text-decoration: underline;
+      }
+
+      .content a:hover {
+        opacity: 0.6;
+      }
+
+      .content blockquote {
+        border-left: 4px solid #000;
+        padding-left: 20px;
+        margin: 20px 0;
+        color: #666;
+        font-style: italic;
+      }
+
+      .content ul,
+      .content ol {
+        margin-left: 30px;
+        margin-bottom: 15px;
+      }
+
+      .content li {
+        margin-bottom: 8px;
+      }
+
+      ne-p,
+      ne-h1,
+      ne-h2,
+      ne-h3,
+      ne-h4,
+      ne-ul,
+      ne-ol,
+      ne-li,
+      ne-blockquote,
+      ne-card,
+      ne-hole,
+      ne-viewer-body {
+        display: block !important;
+        position: static !important;
+        float: none !important;
+        height: auto !important;
+        max-height: none !important;
+        width: auto !important;
+        margin: 0 0 0.5em 0; 
+        clear: both;
+      }
+
+      ne-p:empty,
+      ne-p.empty-paragraph {
+        display: none !important;
+      }
+
+      ne-p:has(> .ne-viewer-b-filler:only-child),
+      ne-p:has(> ne-text:empty),
+      ne-p:has(> ne-text:only-child:empty) {
+        display: none !important;
+      }
+
+      .ne-viewer-b-filler {
+        display: none !important;
+      }
+
+      ne-text {
+        display: inline;
+        word-wrap: break-word;
+      }
+
+      ne-h1,
+      ne-h2,
+      ne-h3,
+      ne-h4 {
+        position: relative;
+      }
+
+      ne-h1 {
+        font-size: 2em;
+        font-weight: bold;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.3em;
+      }
+      ne-h2 {
+        font-size: 1.5em;
+        font-weight: bold;
+      }
+      ne-h3 {
+        font-size: 1.25em;
+        font-weight: bold;
+      }
+      ne-h4 {
+        font-size: 1em;
+        font-weight: bold;
+      }
+
+      ne-heading-content {
+        display: inline-block;
+      }
+
+      ne-ul,
+      ne-ol {
+        padding-left: 2em;
+      }
+      ne-li {
+        list-style-type: disc;
+        display: list-item !important;
+      }
+
+      ne-blockquote {
+        border-left: 4px solid #ddd;
+        padding-left: 1em;
+        color: #666;
+        background: #f9f9f9;
+      }
+
+      .ne-image-wrap,
+      .ne-image-box {
+        display: block;
+        text-align: center;
+        margin: 1em 0;
+        max-width: 100%;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto !important; 
+        display: inline-block;
+        border: 1px solid #eee;
+      }
+
+      .ne-codeblock,
+      .ne-codeblock-height-limit {
+        background: #f6f8fa !important;
+        padding: 1em;
+        border-radius: 4px;
+        overflow-x: auto;
+        font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+        font-size: 14px;
+        line-height: 1.45;
+        border: 1px solid #ddd;
+        display: block !important;
+        max-height: none !important; 
+        height: auto !important;
+      }
+
+      .ne-codeblock-inner {
+        display: block !important;
+        height: auto !important;
+        max-height: none !important;
+      }
+
+      .ne-caard-container {
+        height: auto !important;
+        max-height: none !important;
+      }
+
+      .cm-editor,
+      .cm-scroller,
+      .cm-content {
+        display: block !important;
+        position: static !important;
+        height: auto !important;
+        max-height: none !important;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        overflow: visible !important;
+      }
+
+      .cm-line {
+        display: block !important;
+        line-height: 1.5;
+        font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+      }
+
+      .cm-gutters,
+      .ne-codeblock-copy-icon,
+      .ne-ui-exit-max-view-btn,
+      .ne-heading-fold,
+      .ne-heading-ext,
+      .ne-viewer-b-filler,
+      .codeblock-menu,
+      .cm-cursorLayer,
+      .cm-selectionLayer,
+      .ne-icon,
+      .ne-icon-symbol,
+      svg.ne-icon-symbol {
+        display: none !important;
+      }
+
+      a.ne-link {
+        color: #0366d6;
+        text-decoration: none;
+      }
+      a.ne-link:hover {
+        text-decoration: underline;
+      }
+
+      [style*="height"] {
+        height: auto !important;
+        max-height: none !important;
+      }
+
+      .ne-code-viewer,
+      .ne-codeblock-height-limit,
+      .hide-toolbar {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+
+      .toc-sidebar {
+        position: sticky;
+        top: 20px;
+        width: 250px;
+        max-height: calc(100vh - 40px);
+        overflow-y: auto;
+        padding: 20px;
+        margin-left: 40px;
+        border-left: 2px solid #eee;
+        align-self: flex-start;
+      }
+
+      .toc-title {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #000;
+        padding-bottom: 8px;
+      }
+
+      .toc-list {
+        list-style: none;
+      }
+
+      .toc-list li {
+        margin-bottom: 8px;
+      }
+
+      .toc-list a {
+        color: #666;
+        text-decoration: none;
+        font-size: 14px;
+        display: block;
+        padding: 4px 0;
+        transition: all 0.2s;
+        border-left: 2px solid transparent;
+        padding-left: 8px;
+      }
+
+      .toc-list a:hover {
+        color: #000;
+        border-left-color: #000;
+        padding-left: 12px;
+      }
+
+      .toc-list a.active {
+        color: #000;
+        font-weight: 600;
+        border-left-color: #000;
+      }
+
+      .toc-list .toc-h1 {
+        font-weight: 600;
+      }
+
+      .toc-list .toc-h2 {
+        padding-left: 16px;
+      }
+
+      .toc-list .toc-h3 {
+        padding-left: 32px;
+        font-size: 13px;
+      }
+
+      .toc-list .toc-h4 {
+        padding-left: 48px;
+        font-size: 12px;
+        color: #888;
+      }
+
+      @media (max-width: 1200px) {
+        .toc-sidebar {
+          display: none;
+        }
+      }
+
+      .toc-sidebar::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      .toc-sidebar::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 2px;
+      }
+
+      .toc-sidebar::-webkit-scrollbar-thumb:hover {
+        background: #999;
+      }
+
+      .switch-btn {
+        margin-left: 10px;
+        color: #007bff;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .switch-btn:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <div class="container">
+        <a href="/" class="back-link">← 返回列表</a>
+
+        <h1>{{ article.title }}</h1>
+
+        <div class="meta">
+          作者: {{ article.author }} | 目录: {{ article.category or '无' }} |
+          编号: {{ article.id }} |
+          <a href="{{ article.url }}" target="_blank">原文链接</a> |
+          <a href="?v=1" class="switch-btn">切换旧版模板</a>
+        </div>
+
+        <div class="content">{{ article.content_html | safe }}</div>
+      </div>
+
+      <aside class="toc-sidebar">
+        <div class="toc-title">📑 目录</div>
+        <ul class="toc-list" id="toc-list"></ul>
+      </aside>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const content = document.querySelector(".content");
+        const tocList = document.getElementById("toc-list");
+        const headings = content.querySelectorAll(
+          "h1, h2, h3, ne-h1, ne-h2, ne-h3, ne-h4"
+        );
+        if (headings.length === 0) {
+          tocList.innerHTML =
+            '<li style="color: #999; font-size: 13px;">暂无目录</li>';
+          return;
+        }
+        let validHeadings = [];
+
+        headings.forEach((heading, index) => {
+          if (!heading.id) {
+            heading.id = `heading-${index}`;
+          }
+          let titleText = heading.textContent.trim();
+          const neText = heading.querySelector("ne-text");
+          if (neText) {
+            titleText = neText.textContent.trim();
+          }
+          const headingContent = heading.querySelector("ne-heading-content");
+          if (headingContent) {
+            const contentText = headingContent.querySelector("ne-text");
+            if (contentText) {
+              titleText = contentText.textContent.trim();
+            }
+          }
+          if (
+            titleText &&
+            titleText.length > 0 &&
+            !/^[\s\u00A0\u200B]*$/.test(titleText)
+          ) {
+            validHeadings.push({ heading, titleText, index });
+          }
+        });
+        if (validHeadings.length === 0) {
+          tocList.innerHTML =
+            '<li style="color: #999; font-size: 13px;">暂无有效标题</li>';
+          return;
+        }
+
+        validHeadings.forEach(({ heading, titleText, index }) => {
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+
+          a.href = `#${heading.id}`;
+          a.textContent = titleText;
+          let tagName = heading.tagName.toLowerCase();
+          if (tagName.startsWith("ne-")) {
+            tagName = tagName.substring(3); 
+          }
+          a.className = `toc-${tagName}`;
+
+          a.addEventListener("click", function (e) {
+            e.preventDefault();
+            const target = document.getElementById(heading.id);
+            if (target) {
+              target.scrollIntoView({ behavior: "smooth", block: "start" });
+              document.querySelectorAll(".toc-list a").forEach((link) => {
+                link.classList.remove("active");
+              });
+              this.classList.add("active");
+            }
+          });
+
+          li.appendChild(a);
+          tocList.appendChild(li);
+        });
+        let ticking = false;
+        window.addEventListener("scroll", function () {
+          if (!ticking) {
+            window.requestAnimationFrame(function () {
+              updateActiveHeading();
+              ticking = false;
+            });
+            ticking = true;
+          }
+        });
+
+        function updateActiveHeading() {
+          const scrollPos = window.scrollY + 100;
+          let currentHeading = null;
+
+          validHeadings.forEach(({ heading }) => {
+            if (heading.offsetTop <= scrollPos) {
+              currentHeading = heading;
+            }
+          });
+          if (currentHeading) {
+            document.querySelectorAll(".toc-list a").forEach((link) => {
+              link.classList.remove("active");
+              if (link.getAttribute("href") === `#${currentHeading.id}`) {
+                link.classList.add("active");
+              }
+            });
+          }
+        }
+      });
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("ne-p").forEach((p) => {
+          const text = p.textContent.trim();
+          const hasRealContent =
+            text.length > 0 && text !== "" && !/^[\s\u00A0\u200B]+$/.test(text);
+          const hasFiller = p.querySelector(".ne-viewer-b-filler");
+          const hasOnlyBr =
+            p.children.length === 1 && p.children[0].tagName === "BR";
+          const hasOnlyEmptyText = Array.from(p.children).every(
+            (child) =>
+              child.tagName === "NE-TEXT" && child.textContent.trim() === ""
+          );
+          if (!hasRealContent || hasFiller || hasOnlyBr || hasOnlyEmptyText) {
+            p.style.display = "none";
+          }
+        });
+        const images = document.querySelectorAll(".content img");
+        console.log(`找到 ${images.length} 张图片`);
+
+        images.forEach((img, index) => {
+          img.onload = function () {
+            console.log(`✅ 图片 ${index + 1} 加载成功: ${this.src}`);
+          };
+          img.onerror = function () {
+            console.error(`❌ 图片 ${index + 1} 加载失败: ${this.src}`);
+            
+            this.alt = "图片加载失败: " + this.src;
+            this.style.border = "2px solid red";
+          };
+        });
+      });
+    </script>
+
+    <script src="https://xz.aliyun.com/assets/js/yuque/react.production.min.js"></script>
+    <script src="https://xz.aliyun.com/assets/js/yuque/react-dom.production.min.js"></script>
+
+    <script src="https://xz.aliyun.com/assets/js/yuque/doc.umd.js"></script>
+
+    <script src="https://gw.alipayobjects.com/render/p/yuyan_v/180020010000005484/7.1.18/CodeMirror.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("🔍 检查语雀渲染器...");
+        if (window.YuqueDoc) {
+          console.log("✅ 语雀文档渲染器已加载");
+        } else {
+          console.warn("⚠️ 语雀文档渲染器未找到");
+        }
+        if (window.__neInjector) {
+          console.log("✅ NE注入器已加载");
+        } else {
+          console.warn("⚠️ NE注入器未找到");
+        }
+
+        setTimeout(() => {
+          const codeblocks = document.querySelectorAll(
+            '.ne-codeblock, ne-card[data-card-name="codeblock"]'
+          );
+          console.log(`找到 ${codeblocks.length} 个代码块`);
+          codeblocks.forEach((el) => {
+            el.style.display = "block";
+            el.style.visibility = "visible";
+          });
+          let removedCount = 0;
+          document.querySelectorAll("ne-p").forEach((p) => {
+            const text = p.textContent.trim();
+            const html = p.innerHTML.trim();
+            if (text === "") {
+              p.remove();
+              removedCount++;
+              return;
+            }
+            if (/^[\s\u00A0\u200B\u200C\u200D\uFEFF]*$/.test(text)) {
+              p.remove();
+              removedCount++;
+              return;
+            }
+            if (html.includes("ne-viewer-b-filler") && text === "") {
+              p.remove();
+              removedCount++;
+              return;
+            }
+            const neTexts = Array.from(p.querySelectorAll("ne-text"));
+            if (
+              neTexts.length > 0 &&
+              neTexts.every((nt) => nt.textContent.trim() === "")
+            ) {
+              p.remove();
+              removedCount++;
+              return;
+            }
+          });
+
+          console.log(`🧹 清理了 ${removedCount} 个空段落`);
+        }, 200); 
+      });
+    </script>
+  </body>
+</html>

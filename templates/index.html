@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>文章搜索</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial,
+          sans-serif;
+        background: #fff;
+        color: #000;
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+
+      h1 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #000;
+        padding-bottom: 10px;
+      }
+
+      .search-box {
+        margin-bottom: 40px;
+        border: 2px solid #000;
+        padding: 20px;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border: 1px solid #000;
+        margin-bottom: 15px;
+      }
+
+      .search-options {
+        margin-bottom: 15px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+
+      .search-options label {
+        cursor: pointer;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        transition: all 0.2s;
+        user-select: none;
+      }
+
+      .search-options label:hover {
+        background: #f5f5f5;
+        border-color: #000;
+      }
+
+      .search-options input[type="checkbox"] {
+        margin-right: 6px;
+        cursor: pointer;
+      }
+
+      .search-options input[type="checkbox"]:checked + span {
+        font-weight: 600;
+      }
+
+      .search-btn {
+        padding: 10px 30px;
+        background: #000;
+        color: #fff;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      .search-btn:hover {
+        background: #333;
+      }
+
+      .article-list {
+        list-style: none;
+      }
+
+      .article-item {
+        border-bottom: 1px solid #ccc;
+        padding: 20px 0;
+      }
+
+      .article-item:hover {
+        background: #f5f5f5;
+      }
+
+      .article-title {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .article-title a {
+        color: #000;
+        text-decoration: none;
+      }
+
+      .article-title a:hover {
+        text-decoration: underline;
+      }
+
+      .article-meta {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .article-snippet {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      .article-snippet mark {
+        background: #ffeb3b;
+        padding: 2px 4px;
+        font-weight: 600;
+      }
+
+      .no-results {
+        text-align: center;
+        padding: 40px;
+        color: #999;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #999;
+      }
+
+      .empty-state h2 {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+
+      .empty-state p {
+        font-size: 16px;
+      }
+
+      .pagination {
+        margin-top: 30px;
+        text-align: center;
+        padding: 20px 0;
+        border-top: 1px solid #eee;
+      }
+
+      .pagination a,
+      .pagination span {
+        display: inline-block;
+        padding: 8px 12px;
+        margin: 0 5px;
+        border: 1px solid #000;
+        color: #000;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+
+      .pagination a:hover {
+        background: #000;
+        color: #fff;
+      }
+
+      .pagination .current {
+        background: #000;
+        color: #fff;
+        font-weight: 600;
+      }
+
+      .pagination .disabled {
+        border-color: #ccc;
+        color: #ccc;
+        cursor: not-allowed;
+      }
+
+      .result-info {
+        margin-bottom: 20px;
+        padding: 10px;
+        background: #f5f5f5;
+        border-left: 3px solid #000;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 style="text-align: center">XZ Search</h1>
+
+      <div class="search-box">
+        <form method="GET" action="/">
+          <input
+            type="text"
+            name="keyword"
+            class="search-input"
+            placeholder="输入关键词搜索..."
+            value="{{ keyword }}"
+          />
+
+          <div class="search-options">
+            <label>
+              <input type="checkbox" name="fields" value="title" {% if 'title'
+              in search_fields %}checked{% endif %}>
+              <span>标题</span>
+            </label>
+            <label>
+              <input type="checkbox" name="fields" value="author" {% if 'author'
+              in search_fields %}checked{% endif %}>
+              <span>作者</span>
+            </label>
+            <label>
+              <input type="checkbox" name="fields" value="category" {% if
+              'category' in search_fields %}checked{% endif %}>
+              <span>目录</span>
+            </label>
+            <label>
+              <input type="checkbox" name="fields" value="content" {% if
+              'content' in search_fields %}checked{% endif %}>
+              <span>文章内容</span>
+            </label>
+            <label>
+              <input type="checkbox" name="fields" value="url" {% if 'url' in
+              search_fields %}checked{% endif %}>
+              <span>网址</span>
+            </label>
+            <button type="submit" class="search-btn" style="margin-left: auto">
+              搜索
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {% if keyword %} {% if articles %}
+      <div class="result-info">
+        找到 <strong>{{ total }}</strong> 篇文章，当前第
+        <strong>{{ page }}</strong> / {{ total_pages }} 页
+      </div>
+
+      <ul class="article-list">
+        {% for article in articles %}
+        <li class="article-item">
+          <div class="article-title">
+            <a href="/article/{{ article.id }}">{{ article.title }}</a>
+          </div>
+          <div class="article-meta">
+            作者: {{ article.author }} | 目录: {{ article.category or '无' }} |
+            编号: {{ article.id }}
+          </div>
+          {% if article.snippet %}
+          <div class="article-snippet">{{ article.snippet | safe }}</div>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+
+      {% if total_pages > 1 %}
+      <div class="pagination">
+        {% if page > 1 %}
+        <a
+          href="?keyword={{ keyword }}&{% for field in search_fields %}fields={{ field }}&{% endfor %}page={{ page - 1 }}"
+          >← 上一页</a
+        >
+        {% else %}
+        <span class="disabled">← 上一页</span>
+        {% endif %} {% for p in range(1, total_pages + 1) %} {% if p == page %}
+        <span class="current">{{ p }}</span>
+        {% elif p <= 3 or p > total_pages - 3 or (p >= page - 2 and p <= page +
+        2) %}
+        <a
+          href="?keyword={{ keyword }}&{% for field in search_fields %}fields={{ field }}&{% endfor %}page={{ p }}"
+          >{{ p }}</a
+        >
+        {% elif p == 4 or p == total_pages - 3 %}
+        <span>...</span>
+        {% endif %} {% endfor %} {% if page < total_pages %}
+        <a
+          href="?keyword={{ keyword }}&{% for field in search_fields %}fields={{ field }}&{% endfor %}page={{ page + 1 }}"
+          >下一页 →</a
+        >
+        {% else %}
+        <span class="disabled">下一页 →</span>
+        {% endif %}
+      </div>
+      {% endif %} {% else %}
+      <div class="no-results">未找到匹配的文章</div>
+      {% endif %} {% else %}
+      <div class="empty-state">
+        <h2>请输入关键词开始搜索</h2>
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>

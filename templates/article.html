@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="no-referrer" />
+    <title>{{ article.title }}</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial,
+          sans-serif;
+        background: #fff;
+        color: #000;
+        line-height: 1.8;
+        display: flex;
+        justify-content: center;
+      }
+
+      .layout {
+        display: flex;
+        max-width: 1400px;
+        width: 100%;
+        position: relative;
+      }
+
+      .container {
+        flex: 1;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+
+      .back-link {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #000;
+        text-decoration: none;
+        border-bottom: 1px solid #000;
+      }
+
+      .back-link:hover {
+        opacity: 0.6;
+      }
+
+      h1 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #000;
+        padding-bottom: 10px;
+      }
+
+      .meta {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .content {
+        font-size: 16px;
+        line-height: 1.8;
+      }
+
+      .content img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 20px auto;
+        border: 1px solid #eee;
+      }
+
+      .content h1,
+      .content h2,
+      .content h3 {
+        margin-top: 30px;
+        margin-bottom: 15px;
+        font-weight: 600;
+      }
+
+      .content h1 {
+        font-size: 28px;
+        border-bottom: 2px solid #000;
+        padding-bottom: 10px;
+      }
+
+      .content h2 {
+        font-size: 24px;
+      }
+
+      .content h3 {
+        font-size: 20px;
+      }
+
+      .content p {
+        margin-bottom: 15px;
+      }
+
+      .content pre {
+        background: #f5f5f5;
+        padding: 15px;
+        border-left: 3px solid #000;
+        overflow-x: auto;
+        margin: 15px 0;
+      }
+
+      .content code {
+        font-family: "Courier New", monospace;
+        font-size: 14px;
+      }
+
+      .content a {
+        color: #000;
+        text-decoration: underline;
+      }
+
+      .content a:hover {
+        opacity: 0.6;
+      }
+
+      .content blockquote {
+        border-left: 4px solid #000;
+        padding-left: 20px;
+        margin: 20px 0;
+        color: #666;
+        font-style: italic;
+      }
+
+      .content ul,
+      .content ol {
+        margin-left: 30px;
+        margin-bottom: 15px;
+      }
+
+      .content li {
+        margin-bottom: 8px;
+      }
+
+      .toc-sidebar {
+        position: sticky;
+        top: 20px;
+        width: 250px;
+        max-height: calc(100vh - 40px);
+        overflow-y: auto;
+        padding: 20px;
+        margin-left: 40px;
+        border-left: 2px solid #eee;
+        align-self: flex-start;
+      }
+
+      .toc-title {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #000;
+        padding-bottom: 8px;
+      }
+
+      .toc-list {
+        list-style: none;
+      }
+
+      .toc-list li {
+        margin-bottom: 8px;
+      }
+
+      .toc-list a {
+        color: #666;
+        text-decoration: none;
+        font-size: 14px;
+        display: block;
+        padding: 4px 0;
+        transition: all 0.2s;
+        border-left: 2px solid transparent;
+        padding-left: 8px;
+      }
+
+      .toc-list a:hover {
+        color: #000;
+        border-left-color: #000;
+        padding-left: 12px;
+      }
+
+      .toc-list a.active {
+        color: #000;
+        font-weight: 600;
+        border-left-color: #000;
+      }
+
+      .toc-list .toc-h1 {
+        font-weight: 600;
+      }
+
+      .toc-list .toc-h2 {
+        padding-left: 16px;
+      }
+
+      .toc-list .toc-h3 {
+        padding-left: 32px;
+        font-size: 13px;
+      }
+
+      @media (max-width: 1200px) {
+        .toc-sidebar {
+          display: none;
+        }
+      }
+
+      .toc-sidebar::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      .toc-sidebar::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 2px;
+      }
+
+      .toc-sidebar::-webkit-scrollbar-thumb:hover {
+        background: #999;
+      }
+
+      .switch-btn {
+        margin-left: 10px;
+        color: #007bff;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .switch-btn:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <div class="container">
+        <a href="/" class="back-link">← 返回列表</a>
+
+        <h1>{{ article.title }}</h1>
+
+        <div class="meta">
+          作者: {{ article.author }} | 目录: {{ article.category or '无' }} |
+          编号: {{ article.id }} |
+          <a href="{{ article.url }}" target="_blank">原文链接</a> |
+          <a href="?v=2" class="switch-btn">切换新版模板</a>
+        </div>
+
+        <div class="content">{{ article.content_html | safe }}</div>
+      </div>
+
+      <aside class="toc-sidebar">
+        <div class="toc-title">📑 目录</div>
+        <ul class="toc-list" id="toc-list"></ul>
+      </aside>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const content = document.querySelector(".content");
+        const tocList = document.getElementById("toc-list");
+        const headings = content.querySelectorAll("h1, h2, h3");
+        if (headings.length === 0) {
+          tocList.innerHTML =
+            '<li style="color: #999; font-size: 13px;">暂无目录</li>';
+          return;
+        }
+
+        headings.forEach((heading, index) => {
+          if (!heading.id) {
+            heading.id = `heading-${index}`;
+          }
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+
+          a.href = `#${heading.id}`;
+          a.textContent = heading.textContent.trim();
+          a.className = `toc-${heading.tagName.toLowerCase()}`;
+
+          a.addEventListener("click", function (e) {
+            e.preventDefault();
+            const target = document.getElementById(heading.id);
+            if (target) {
+              target.scrollIntoView({ behavior: "smooth", block: "start" });
+              document.querySelectorAll(".toc-list a").forEach((link) => {
+                link.classList.remove("active");
+              });
+              this.classList.add("active");
+            }
+          });
+
+          li.appendChild(a);
+          tocList.appendChild(li);
+        });
+        let ticking = false;
+        window.addEventListener("scroll", function () {
+          if (!ticking) {
+            window.requestAnimationFrame(function () {
+              updateActiveHeading();
+              ticking = false;
+            });
+            ticking = true;
+          }
+        });
+
+        function updateActiveHeading() {
+          const scrollPos = window.scrollY + 100;
+          let currentHeading = null;
+
+          headings.forEach((heading) => {
+            if (heading.offsetTop <= scrollPos) {
+              currentHeading = heading;
+            }
+          });
+          if (currentHeading) {
+            document.querySelectorAll(".toc-list a").forEach((link) => {
+              link.classList.remove("active");
+              if (link.getAttribute("href") === `#${currentHeading.id}`) {
+                link.classList.add("active");
+              }
+            });
+          }
+        }
+      });
+      document.addEventListener("DOMContentLoaded", function () {
+        const images = document.querySelectorAll(".content img");
+        console.log(`找到 ${images.length} 张图片`);
+
+        images.forEach((img, index) => {
+          img.onload = function () {
+            console.log(`✅ 图片 ${index + 1} 加载成功: ${this.src}`);
+          };
+          img.onerror = function () {
+            console.error(`❌ 图片 ${index + 1} 加载失败: ${this.src}`);
+            this.alt = "图片加载失败: " + this.src;
+            this.style.border = "2px solid red";
+          };
+        });
+      });
+    </script>
+  </body>
+</html>
